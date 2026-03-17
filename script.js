@@ -1,196 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chaos Game 😏</title>
+function celebrate(){
 
-<style>
-body{
-  margin:0;
-  height:100vh;
-  overflow:hidden;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#ffdee9,#b5fffc);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+  // Hide ALL buttons except restart
+  document.querySelectorAll("button").forEach(btn=>{
+    if(btn.id !== "restartBtn"){
+      btn.style.display = "none";
+    }
+  });
 
-/* CARD */
-.card{
-  background:white;
-  border-radius:20px;
-  padding:40px;
-  text-align:center;
-  max-width:400px;
-  width:90%;
-  box-shadow:0 0 20px rgba(0,0,0,0.1);
-  border:4px solid transparent;
-  animation:glowBorder 3s infinite alternate;
-  position:relative;
-  z-index:2;
-}
-@keyframes glowBorder{
-  from{border-color:#ff9a9e;}
-  to{border-color:#fad0c4;}
-}
-h1{color:#ff6f91;}
-p{color:#555;}
-
-/* BUTTON */
-button{
-  position:absolute;
-  padding:12px 22px;
-  border:none;
-  border-radius:25px;
-  background:#ff6f91;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  transition:transform .2s;
-  z-index:3;
-}
-button:hover{transform:scale(1.1);}
-
-/* COUNTER */
-#counter{
-  position:fixed;
-  top:10px;
-  left:10px;
-  background:white;
-  padding:8px 14px;
-  border-radius:10px;
-  font-weight:bold;
-  z-index:5;
-}
-
-/* FINAL MESSAGE */
-#finalMsg{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  padding:30px 40px;
-  border-radius:25px;
-  font-size:24px;
-  color:#ff6f91;
-  text-align:center;
-  display:none;
-  box-shadow:0 0 20px rgba(0,0,0,0.2);
-  z-index:10;
-}
-
-/* RESTART BUTTON */
-#restartBtn{
-  margin-top:20px;
-  padding:10px 20px;
-  border:none;
-  border-radius:20px;
-  background:#ff6f91;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  position:relative;
-}
-#restartBtn:hover{
-  background:#ff4f79;
-  transform:scale(1.05);
-}
-
-/* HEART */
-.heart{
-  position:absolute;
-  width:20px;
-  height:20px;
-  background:#ff69b4;
-  transform:rotate(45deg);
-  animation:floatHearts 10s linear forwards;
-}
-.heart::before,
-.heart::after{
-  content:"";
-  position:absolute;
-  width:20px;
-  height:20px;
-  background:#ff69b4;
-  border-radius:50%;
-}
-.heart::before{top:-10px;}
-.heart::after{left:-10px;}
-
-@keyframes floatHearts{
-  0%{transform:translateY(100vh) rotate(45deg);opacity:1;}
-  100%{transform:translateY(-100vh) rotate(45deg);opacity:0;}
-}
-</style>
-</head>
-
-<body>
-
-<div id="counter">Clicks: 0 / 20</div>
-
-<div class="card">
-<h1>Catch to reveal the message😉</h1>
-<p>Try to catch the button if you can...😛</p>
-</div>
-
-<button id="mainBtn">Catch Me👹</button>
-
-<div id="finalMsg">
-hehheee .... 
-<br><br>
-<button id="restartBtn">Restart Game 🔁</button>
-</div>
-
-<audio id="bgMusic" src="tu-na-samjhe.mp3" loop></audio>
-
-<script>
-
-/* -------- MUSIC -------- */
-const music = document.getElementById("bgMusic");
-music.volume = 0.5;
-
-let musicStarted = false;
-
-function startMusic(){
-  if(!musicStarted){
-    music.play();
-    musicStarted = true;
+  // Heart explosion
+  for(let i=0;i<80;i++){
+    createHeart(
+      Math.random()*window.innerWidth,
+      Math.random()*window.innerHeight
+    );
   }
+
+  finalMsg.style.display = "block";
 }
 
-document.addEventListener("click", startMusic);
-document.addEventListener("mousemove", startMusic);
-
-
-/* -------- FLOATING HEARTS -------- */
-function createBackgroundHeart(){
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (Math.random()*5+5)+"s";
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),10000);
-}
-setInterval(createBackgroundHeart,300);
-
-
-/* -------- GAME VARIABLES -------- */
-let runCount = 0;
-let clickCount = 0;
-
-const maxRuns = 30;
-const maxClicks = 20;
-
-const counter = document.getElementById("counter");
-const finalMsg = document.getElementById("finalMsg");
-const mainBtn = document.getElementById("mainBtn");
-const restartBtn = document.getElementById("restartBtn");
-
-
-/* -------- RESET GAME -------- */
 function resetGame(){
 
   runCount = 0;
@@ -198,127 +25,18 @@ function resetGame(){
 
   counter.innerText = "Clicks: 0 / 20";
 
-  // remove ALL extra buttons
+  // Remove ONLY duplicated buttons
   document.querySelectorAll("button").forEach(btn=>{
     if(btn !== mainBtn && btn !== restartBtn){
       btn.remove();
     }
   });
 
-  // reset main button
+  // Bring main button back
   mainBtn.style.display = "block";
   mainBtn.style.left = "45%";
   mainBtn.style.top = "60%";
 
-  // hide final message
+  // Hide final message
   finalMsg.style.display = "none";
 }
-
-
-/* -------- BUTTON RUN AWAY -------- */
-document.addEventListener("mousemove",function(e){
-
-  if(clickCount >= maxClicks) return;
-
-  const rect = mainBtn.getBoundingClientRect();
-
-  const distX = Math.abs(e.clientX - (rect.left + rect.width/2));
-  const distY = Math.abs(e.clientY - (rect.top + rect.height/2));
-
-  if(distX < 100 && distY < 80 && runCount < maxRuns){
-
-    runCount++;
-
-    mainBtn.style.left = Math.random()*(window.innerWidth-120)+"px";
-    mainBtn.style.top = Math.random()*(window.innerHeight-60)+"px";
-
-  }
-
-});
-
-
-/* -------- CLICK GAME -------- */
-document.addEventListener("click",function(e){
-
-  if(e.target.tagName !== "BUTTON") return;
-  if(e.target.id === "restartBtn") return;
-  if(clickCount >= maxClicks) return;
-
-  clickCount++;
-
-  counter.innerText = "Clicks: " + clickCount + " / 20";
-
-  duplicateButton();
-  duplicateButton();
-
-  createHeart(e.clientX, e.clientY);
-
-  if(clickCount >= maxClicks){
-    celebrate();
-  }
-
-});
-
-
-/* -------- DUPLICATE BUTTON -------- */
-function duplicateButton(){
-
-  const btn = document.createElement("button");
-
-  btn.innerText = "Catch Me 😏";
-
-  btn.style.left = Math.random()*(window.innerWidth-120)+"px";
-  btn.style.top = Math.random()*(window.innerHeight-60)+"px";
-
-  document.body.appendChild(btn);
-
-}
-
-
-/* -------- HEART EXPLOSION -------- */
-function createHeart(x,y){
-
-  for(let i=0;i<10;i++){
-
-    const heart = document.createElement("div");
-    heart.className = "heart";
-
-    heart.style.left = (x+(Math.random()*50-25))+"px";
-    heart.style.top = (y+(Math.random()*50-25))+"px";
-
-    heart.style.animationDuration = (Math.random()*2+1.5)+"s";
-
-    document.body.appendChild(heart);
-
-    setTimeout(()=>heart.remove(),3000);
-
-  }
-
-}
-
-
-/* -------- CELEBRATION -------- */
-function celebrate(){
-
-  document.querySelectorAll("button").forEach(btn=>{
-    if(btn !== restartBtn){
-      btn.remove();
-    }
-  });
-
-  for(let i=0;i<80;i++){
-    createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
-  }
-
-  finalMsg.style.display = "block";
-
-}
-
-
-/* -------- RESTART BUTTON -------- */
-restartBtn.addEventListener("click", resetGame);
-
-</script>
-
-</body>
-</html>

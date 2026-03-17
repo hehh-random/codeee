@@ -6,7 +6,6 @@
 <title>Chaos Game 👹</title>
 
 <style>
-
 body{
   margin:0;
   height:100vh;
@@ -19,7 +18,6 @@ body{
 }
 
 /* CARD */
-
 .card{
   background:white;
   border-radius:20px;
@@ -33,22 +31,14 @@ body{
   position:relative;
   z-index:2;
 }
-
 @keyframes glowBorder{
   from{border-color:#ff9a9e;}
   to{border-color:#fad0c4;}
 }
-
-h1{
-  color:#ff6f91;
-}
-
-p{
-  color:#555;
-}
+h1{color:#ff6f91;}
+p{color:#555;}
 
 /* BUTTON */
-
 button{
   position:absolute;
   padding:12px 22px;
@@ -61,13 +51,9 @@ button{
   transition:transform .2s;
   z-index:3;
 }
+button:hover{transform:scale(1.1);}
 
-button:hover{
-  transform:scale(1.1);
-}
-
-/* CLICK COUNTER */
-
+/* COUNTER */
 #counter{
   position:fixed;
   top:10px;
@@ -80,7 +66,6 @@ button:hover{
 }
 
 /* FINAL MESSAGE */
-
 #finalMsg{
   position:fixed;
   top:50%;
@@ -97,50 +82,48 @@ button:hover{
   z-index:10;
 }
 
-/* HEART DESIGN */
+/* RESTART BUTTON */
+#restartBtn{
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:#ff6f91;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  position:relative;
+}
+#restartBtn:hover{
+  background:#ff4f79;
+  transform:scale(1.05);
+}
 
+/* HEART */
 .heart{
   position:absolute;
   width:20px;
   height:20px;
-  background-color:#ff69b4;
+  background:#ff69b4;
   transform:rotate(45deg);
   animation:floatHearts 10s linear forwards;
 }
-
 .heart::before,
 .heart::after{
   content:"";
   position:absolute;
   width:20px;
   height:20px;
-  background-color:#ff69b4;
+  background:#ff69b4;
   border-radius:50%;
 }
-
-.heart::before{
-  top:-10px;
-  left:0;
-}
-
-.heart::after{
-  left:-10px;
-  top:0;
-}
-
-/* FLOATING ANIMATION */
+.heart::before{top:-10px;}
+.heart::after{left:-10px;}
 
 @keyframes floatHearts{
-  0%{
-    transform:translateY(100vh) rotate(45deg);
-    opacity:1;
-  }
-  100%{
-    transform:translateY(-100vh) rotate(45deg);
-    opacity:0;
-  }
+  0%{transform:translateY(100vh) rotate(45deg);opacity:1;}
+  100%{transform:translateY(-100vh) rotate(45deg);opacity:0;}
 }
-
 </style>
 </head>
 
@@ -149,160 +132,191 @@ button:hover{
 <div id="counter">Clicks: 0 / 20</div>
 
 <div class="card">
-<h1>catch to reavel the message😙</h1>
-<p>Try to catch the button if you can...👀</p>
+<h1>Catch to reavel the message😙</h1>
+<p>Try to catch the button if you can...<🤓/p>
 </div>
 
-<button id="mainBtn" style="left:45%;top:60%;">Catch Me 😛</button>
+<button id="mainBtn">Catch Me 😛</button>
 
-<div id="finalMsg">......</div>
+<div id="finalMsg">
+.........
+<br><br>
+<button id="restartBtn">Restart??👀</button>
+</div>
 
 <audio id="bgMusic" src="TuNaSamjhe.mp3" loop></audio>
 
 <script>
 
-/* FLOATING BACKGROUND HEARTS */
+/* -------- MUSIC -------- */
+const music = document.getElementById("bgMusic");
+music.volume = 0.5;
 
-function createBackgroundHeart(){
+let musicStarted = false;
 
-  const heart=document.createElement("div")
-  heart.className="heart"
-
-  heart.style.left=Math.random()*100+"vw"
-  heart.style.animationDuration=(Math.random()*5+5)+"s"
-
-  document.body.appendChild(heart)
-
-  setTimeout(()=>heart.remove(),10000)
+function startMusic(){
+  if(!musicStarted){
+    music.play();
+    musicStarted = true;
+  }
 }
 
-setInterval(createBackgroundHeart,300)
+document.addEventListener("click", startMusic);
+document.addEventListener("mousemove", startMusic);
 
 
+/* -------- FLOATING HEARTS -------- */
+function createBackgroundHeart(){
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (Math.random()*5+5)+"s";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),10000);
+}
+setInterval(createBackgroundHeart,300);
 
-/* CHAOS BUTTON LOGIC */
 
-let runCount=0
-let maxRuns=30
+/* -------- GAME VARIABLES -------- */
+let runCount = 0;
+let clickCount = 0;
 
-let clickCount=0
-let maxClicks=20
+const maxRuns = 30;
+const maxClicks = 20;
 
-const counter=document.getElementById("counter")
-const finalMsg=document.getElementById("finalMsg")
-const music=document.getElementById("bgMusic")
+const counter = document.getElementById("counter");
+const finalMsg = document.getElementById("finalMsg");
+const mainBtn = document.getElementById("mainBtn");
+const restartBtn = document.getElementById("restartBtn");
 
-/* BUTTON RUN AWAY */
 
+/* -------- RESET GAME -------- */
+function resetGame(){
+
+  runCount = 0;
+  clickCount = 0;
+
+  counter.innerText = "Clicks: 0 / 20";
+
+  // remove ALL extra buttons
+  document.querySelectorAll("button").forEach(btn=>{
+    if(btn !== mainBtn && btn !== restartBtn){
+      btn.remove();
+    }
+  });
+
+  // reset main button
+  mainBtn.style.display = "block";
+  mainBtn.style.left = "45%";
+  mainBtn.style.top = "60%";
+
+  // hide final message
+  finalMsg.style.display = "none";
+}
+
+
+/* -------- BUTTON RUN AWAY -------- */
 document.addEventListener("mousemove",function(e){
 
-  const btn=document.getElementById("mainBtn")
-  if(!btn) return
+  if(clickCount >= maxClicks) return;
 
-  const rect=btn.getBoundingClientRect()
+  const rect = mainBtn.getBoundingClientRect();
 
-  const distX=Math.abs(e.clientX-(rect.left+rect.width/2))
-  const distY=Math.abs(e.clientY-(rect.top+rect.height/2))
+  const distX = Math.abs(e.clientX - (rect.left + rect.width/2));
+  const distY = Math.abs(e.clientY - (rect.top + rect.height/2));
 
-  if(distX<100 && distY<80 && runCount<maxRuns){
+  if(distX < 100 && distY < 80 && runCount < maxRuns){
 
-    runCount++
+    runCount++;
 
-    const x=Math.random()*(window.innerWidth-120)
-    const y=Math.random()*(window.innerHeight-60)
-
-    btn.style.left=x+"px"
-    btn.style.top=y+"px"
+    mainBtn.style.left = Math.random()*(window.innerWidth-120)+"px";
+    mainBtn.style.top = Math.random()*(window.innerHeight-60)+"px";
 
   }
 
-})
+});
 
 
-
-/* BUTTON CLICK */
-
+/* -------- CLICK GAME -------- */
 document.addEventListener("click",function(e){
 
-  if(e.target.tagName!=="BUTTON") return
-  if(clickCount>=maxClicks) return
+  if(e.target.tagName !== "BUTTON") return;
+  if(e.target.id === "restartBtn") return;
+  if(clickCount >= maxClicks) return;
 
-  clickCount++
-  counter.innerText="Clicks: "+clickCount+" / 20"
+  clickCount++;
 
-  duplicateButton()
-  duplicateButton()
+  counter.innerText = "Clicks: " + clickCount + " / 20";
 
-  createHeart(e.clientX,e.clientY)
+  duplicateButton();
+  duplicateButton();
 
-  if(clickCount>=maxClicks){
-    celebrate()
+  createHeart(e.clientX, e.clientY);
+
+  if(clickCount >= maxClicks){
+    celebrate();
   }
 
-})
+});
 
 
-
-/* DUPLICATE BUTTON */
-
+/* -------- DUPLICATE BUTTON -------- */
 function duplicateButton(){
 
-  const btn=document.createElement("button")
+  const btn = document.createElement("button");
 
-  btn.innerText="Catch Me 😛"
+  btn.innerText = "Catch Me 😛";
 
-  btn.style.left=Math.random()*(window.innerWidth-120)+"px"
-  btn.style.top=Math.random()*(window.innerHeight-60)+"px"
+  btn.style.left = Math.random()*(window.innerWidth-120)+"px";
+  btn.style.top = Math.random()*(window.innerHeight-60)+"px";
 
-  document.body.appendChild(btn)
+  document.body.appendChild(btn);
 
 }
 
 
-
-/* HEART EXPLOSION */
-
+/* -------- HEART EXPLOSION -------- */
 function createHeart(x,y){
 
   for(let i=0;i<10;i++){
 
-    const heart=document.createElement("div")
-    heart.className="heart"
+    const heart = document.createElement("div");
+    heart.className = "heart";
 
-    heart.style.left=(x+(Math.random()*50-25))+"px"
-    heart.style.top=(y+(Math.random()*50-25))+"px"
+    heart.style.left = (x+(Math.random()*50-25))+"px";
+    heart.style.top = (y+(Math.random()*50-25))+"px";
 
-    heart.style.animationDuration=(Math.random()*2+1.5)+"s"
+    heart.style.animationDuration = (Math.random()*2+1.5)+"s";
 
-    document.body.appendChild(heart)
+    document.body.appendChild(heart);
 
-    setTimeout(()=>heart.remove(),3000)
+    setTimeout(()=>heart.remove(),3000);
 
   }
 
 }
 
 
-
-/* FINAL CELEBRATION */
-
+/* -------- CELEBRATION -------- */
 function celebrate(){
 
-  document.querySelectorAll("button").forEach(b=>b.remove())
+  document.querySelectorAll("button").forEach(btn=>{
+    if(btn !== restartBtn){
+      btn.remove();
+    }
+  });
 
   for(let i=0;i<80;i++){
-
-    const x=Math.random()*window.innerWidth
-    const y=Math.random()*window.innerHeight
-
-    createHeart(x,y)
-
+    createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
   }
 
-  finalMsg.style.display="block"
-
+  finalMsg.style.display = "block";
 
 }
+
+
+/* -------- RESTART BUTTON -------- */
+restartBtn.addEventListener("click", resetGame);
 
 </script>
 

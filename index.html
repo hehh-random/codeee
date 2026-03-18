@@ -145,6 +145,7 @@ hehheee ....
 </div>
 
 <audio id="bgMusic" src="./Tu-na-samjhe.mp3" loop></audio>
+
 <script>
 
 /* -------- MUSIC -------- */
@@ -300,10 +301,13 @@ function createHeart(x,y){
 function celebrate(){
 
   document.querySelectorAll("button").forEach(btn=>{
-    if(btn !== restartBtn){
+    if(btn !== restartBtn && btn !== mainBtn){
       btn.remove();
     }
   });
+
+  // FIX: hide instead of remove
+  mainBtn.style.display = "none";
 
   for(let i=0;i<80;i++){
     createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);

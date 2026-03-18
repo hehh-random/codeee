@@ -33,7 +33,6 @@ function resetGame(){
   finalMsg.style.display = "none";
 }
 
-/* -------- MUSIC -------- */
 const music = document.getElementById("bgMusic");
 
 let musicStarted = false;
@@ -41,15 +40,15 @@ let musicStarted = false;
 function startMusic(){
   if(!musicStarted){
     music.muted = false;
-    music.play().catch(()=>{}); // prevents errors if blocked
+    music.play().catch(()=>{});
     musicStarted = true;
   }
 }
 
-// Start muted to satisfy autoplay policy
+// Start muted (required for autoplay)
 music.muted = true;
 music.play().catch(()=>{});
 
-// Real interaction triggers sound
+// Start real audio on FIRST interaction
 document.addEventListener("click", startMusic);
 document.addEventListener("mousemove", startMusic);

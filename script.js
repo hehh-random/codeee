@@ -1,21 +1,22 @@
-function celebrate(){
+function resetGame(){
+
+  runCount = 0;
+  clickCount = 0;
+
+  counter.innerText = "Clicks: 0 / 20";
+
+  // remove duplicate buttons
   document.querySelectorAll("button").forEach(btn=>{
-    if(btn !== restartBtn){
+    if(btn !== mainBtn && btn !== restartBtn){
       btn.remove();
     }
   });
 
-  for(let i=0;i<80;i++){
-    createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
-  }
+  // bring back main button
+  mainBtn.style.display = "block";
+  mainBtn.style.left = "45%";
+  mainBtn.style.top = "60%";
 
-  finalMsg.style.display = "block";
+  // hide final message
+  finalMsg.style.display = "none";
 }
-
-document.querySelectorAll("button").forEach(btn=>{
-  if(btn !== mainBtn && btn !== restartBtn){
-    btn.remove();
-  } else {
-    btn.style.display = "block"; // 👈 restore visibility
-  }
-});

@@ -144,28 +144,8 @@ cutieee love youuuhhh😛😭
 <button id="restartBtn">Restart Game 🔁</button>
 </div>
 
-<audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio><script>
-/* -------- MUSIC -------- */
-const music = document.getElementById("bgMusic");
-
-let musicStarted = false;
-
-function startMusic(){
-  if(!musicStarted){
-    music.currentTime = 0;
-    music.muted = false;
-    music.play().catch(err => console.log(err));
-    musicStarted = true;
-  }
-}
-
-music.muted = true;
-
-// ONLY start after real interaction
-document.addEventListener("click", startMusic);
-document.addEventListener("mousemove", startMusic);
-
-
+<audio id="bgMusic" src=" music.mp3 " loop></audio>
+<script>
 
 /* -------- FLOATING HEARTS -------- */
 function createBackgroundHeart(){

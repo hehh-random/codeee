@@ -144,17 +144,29 @@ cutieee love youuuhhh😛😭
 <button id="restartBtn">Restart Game 🔁</button>
 </div>
 
-<audio id="bgMusic" src="music.mp3" loop></audio>
+<audio id="bgMusic" src=" music.mp3 " loop></audio>
 <script>
-function showCustomMessage() {
-  const msg = document.getElementById("customMsg");
-  msg.style.display = "block";
-  const music = document.getElementById("bgMusic");
-  music.play();
-  }
-</script>
+/* -------- MUSIC -------- */
+const music = document.getElementById("bgMusic");
 
-<script>
+let musicStarted = false;
+
+function startMusic(){
+  if(!musicStarted){
+    music.currentTime = 0;
+    music.muted = false;
+    music.play().catch(err => console.log(err));
+    musicStarted = true;
+  }
+}
+
+music.muted = true;
+
+// ONLY start after real interaction
+document.addEventListener("click", startMusic);
+document.addEventListener("mousemove", startMusic);
+
+
 
 /* -------- FLOATING HEARTS -------- */
 function createBackgroundHeart(){

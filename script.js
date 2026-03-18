@@ -11,3 +11,11 @@ function celebrate(){
 
   finalMsg.style.display = "block";
 }
+
+document.querySelectorAll("button").forEach(btn=>{
+  if(btn !== mainBtn && btn !== restartBtn){
+    btn.remove();
+  } else {
+    btn.style.display = "block"; // 👈 restore visibility
+  }
+});

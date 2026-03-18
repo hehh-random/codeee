@@ -32,3 +32,22 @@ function resetGame(){
 
   finalMsg.style.display = "none";
 }
+const music = document.getElementById("bgMusic");
+
+music.load(); // 🔥 force browser to load it properly
+
+let musicStarted = false;
+
+function startMusic(){
+  if(!musicStarted){
+    music.currentTime = 0;
+    music.muted = false;
+    music.play().catch(err => console.log(err));
+    musicStarted = true;
+  }
+}
+
+music.muted = true;
+
+document.addEventListener("click", startMusic);
+document.addEventListener("mousemove", startMusic);

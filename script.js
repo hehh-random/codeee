@@ -1,22 +1,17 @@
-function resetGame(){
+function celebrate(){
 
-  runCount = 0;
-  clickCount = 0;
-
-  counter.innerText = "Clicks: 0 / 20";
-
-  // remove duplicate buttons
   document.querySelectorAll("button").forEach(btn=>{
-    if(btn !== mainBtn && btn !== restartBtn){
+    if(btn !== restartBtn && btn !== mainBtn){
       btn.remove();
     }
   });
 
-  // bring back main button
-  mainBtn.style.display = "block";
-  mainBtn.style.left = "45%";
-  mainBtn.style.top = "60%";
+  // hide main button instead of deleting it
+  mainBtn.style.display = "none";
 
-  // hide final message
-  finalMsg.style.display = "none";
+  for(let i=0;i<80;i++){
+    createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
+  }
+
+  finalMsg.style.display = "block";
 }

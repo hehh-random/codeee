@@ -32,23 +32,3 @@ function resetGame(){
 
   finalMsg.style.display = "none";
 }
-
-const music = document.getElementById("bgMusic");
-
-let musicStarted = false;
-
-function startMusic(){
-  if(!musicStarted){
-    music.muted = false;
-    music.play().catch(()=>{});
-    musicStarted = true;
-  }
-}
-
-// Start muted (required for autoplay)
-music.muted = true;
-music.play().catch(()=>{});
-
-// Start real audio on FIRST interaction
-document.addEventListener("click", startMusic);
-document.addEventListener("mousemove", startMusic);

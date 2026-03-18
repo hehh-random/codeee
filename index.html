@@ -147,22 +147,26 @@ cutieee love youuuhhh😛😭
 <audio id="bgMusic" src="songg.mp3" loop></audio>
 
 <script>
-
 /* -------- MUSIC -------- */
 const music = document.getElementById("bgMusic");
-music.play();
 
 let musicStarted = false;
 
 function startMusic(){
   if(!musicStarted){
-    music.play();
+    music.currentTime = 0;
+    music.muted = false;
+    music.play().catch(err => console.log(err));
     musicStarted = true;
   }
 }
 
+music.muted = true;
+
+// ONLY start after real interaction
 document.addEventListener("click", startMusic);
 document.addEventListener("mousemove", startMusic);
+
 
 
 /* -------- FLOATING HEARTS -------- */

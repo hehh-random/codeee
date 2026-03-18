@@ -144,10 +144,25 @@ hehheee ....
 <button id="restartBtn">Restart Game 🔁</button>
 </div>
 
-<audio id="bgMusic" src="TuNaSamjhe.mp3"></audio>
+<audio id="bgMusic" src="Tu-na-samjhe.mp3" loop></audio>
 
 <script>
 
+/* -------- MUSIC -------- */
+const music = document.getElementById("bgMusic");
+music.volume = 0.5;
+
+let musicStarted = false;
+
+function startMusic(){
+  if(!musicStarted){
+    music.play();
+    musicStarted = true;
+  }
+}
+
+document.addEventListener("click", startMusic);
+document.addEventListener("mousemove", startMusic);
 
 
 /* -------- FLOATING HEARTS -------- */

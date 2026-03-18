@@ -6,7 +6,7 @@ function celebrate(){
     }
   });
 
-  // hide main button instead of deleting it
+  // hide main button instead of removing it
   mainBtn.style.display = "none";
 
   for(let i=0;i<80;i++){
